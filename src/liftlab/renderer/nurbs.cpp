@@ -1,7 +1,7 @@
-// Copyrigt (C) 2024 Hüseyin Karakaya
+// Copyrigt (C) 2025 Hüseyin Karakaya
 // This file is part of the Liftab project and is licensed under the MIT License.
 
-#include "nurbs.h"
+#include "liftlab/renderer/nurbs.h"
 
 namespace Nurbs {
 

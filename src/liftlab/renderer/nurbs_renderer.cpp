@@ -1,4 +1,4 @@
-// Copyrigt (C) 2024 Hüseyin Karakaya
+// Copyrigt (C) 2025 Hüseyin Karakaya
 // This file is part of the LiftLab project and is licensed under the MIT License.
 
 #include <glm/gtc/type_ptr.hpp>
@@ -7,7 +7,7 @@
 #include <filesystem>
 #include <cmath>
 
-#include "nurbs_renderer.h"
+#include "liftlab/renderer/nurbs_renderer.h"
 
 using namespace Nurbs;
    
@@ -37,7 +37,7 @@ void NURBSRenderer::initialize()
 
 void NURBSRenderer::generateSurfaceMesh(const Surface* surface)
 {
-    const int resolutionU = 100, resolutionV = 10;
+    const int resolutionU = 100, resolutionV = 200;
     for (int i = 0; i <= resolutionU; ++i) {
         double u = i / (double)resolutionU;
         for (int j = 0; j <= resolutionV; ++j) {
@@ -58,6 +58,15 @@ void NURBSRenderer::render(glm::mat4 view, glm::mat4 projection)
     glDrawArrays(GL_POINTS, 0, vertices.size() / 3);
 }
 
+void NURBSRenderer::clear()
+{
+    surfaces.clear();
+    vertices.clear();
+    surfaceIndices.clear();
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+}
+
 NURBSRenderer::~NURBSRenderer()
 {
     glDeleteVertexArrays(1, &VAO);
@@ -66,7 +75,7 @@ NURBSRenderer::~NURBSRenderer()
 
 void NURBSRenderer::exportSurfaces()
 {
-    std::string outputDir = "/home/huseyin/dev/wing-generator-project/wing-generator/build/";
+    std::string outputDir = "/home/huseyin/dev/wing-generator-project/";
     for (size_t i = 0; i < surfaceIndices.size(); ++i) {
         std::string filename = outputDir + "surface" + std::to_string(i + 1) + ".obj";
         std::ofstream outFile(filename);
@@ -78,7 +87,7 @@ void NURBSRenderer::exportSurfaces()
 
         size_t startIdx = (i == 0) ? 0 : surfaceIndices[i - 1];
         size_t endIdx = surfaceIndices[i];
-        size_t resolutionU = 100, resolutionV = 10;
+        size_t resolutionU = 100, resolutionV = 50;
 
         // Write vertices
         for (size_t idx = startIdx; idx < endIdx; ++idx) {

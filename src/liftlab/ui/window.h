@@ -1,4 +1,4 @@
-// Copyrigt (C) 2024 Hüseyin Karakaya
+// Copyrigt (C) 2025 Hüseyin Karakaya
 // This file is part of the liftlab project and is licensed under the MIT License.
 
 #ifndef WINDOW_H
@@ -12,13 +12,14 @@
 
 #include <string>
 
-#include "nurbs_renderer.h"
-#include "shaders.h"
-#include "gui.h"
+#include "liftlab/renderer/nurbs_renderer.h"
+#include "liftlab/renderer/shader.h"
+#include "liftlab/ui/imgui_drawer.h"
 
 class Window {
 public:
-    Window(NURBSRenderer* renderer);
+    Window();
+    ~Window();
 
     void create();
     void render();

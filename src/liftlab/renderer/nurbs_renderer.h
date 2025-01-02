@@ -1,4 +1,4 @@
-// Copyrigt (C) 2024 Hüseyin Karakaya
+// Copyrigt (C) 2025 Hüseyin Karakaya
 // This file is part of the LiftLab project and is licensed under the MIT License.
 
 #ifndef NURBS_RENDERER_H
@@ -6,13 +6,12 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-
 #include <vector>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
 
-#include "nurbs.h"
+#include "liftlab/renderer/nurbs.h"
 
 class NURBSRenderer {
 public:
@@ -22,6 +21,7 @@ public:
     void addSurface(const Nurbs::Surface* surface);
     void initialize();
     void render(glm::mat4 view, glm::mat4 projection);
+    void clear(); //
     void exportSurfaces();
 
 private:

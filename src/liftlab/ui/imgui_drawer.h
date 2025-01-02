@@ -1,4 +1,4 @@
-// Copyrigt (C) 2024 Hüseyin Karakaya
+// Copyrigt (C) 2025 Hüseyin Karakaya
 // This file is part of the LiftLab project and is licensed under the MIT License.
 
 #ifndef GUI_H
@@ -13,8 +13,8 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
-
-#include "nurbs_renderer.h"
+#include "liftlab/core/wing.h"
+#include "liftlab/renderer/nurbs_renderer.h"
 
 class Gui {
 public:
@@ -26,7 +26,9 @@ public:
     void endFrame();
 
     // Example function to add widgets
-    void drawPanel(float& zoom, glm::vec3& cameraPos, bool& exitRequested, NURBSRenderer* renderer);
+    void drawInfoPanel(float& zoom, glm::vec3& cameraPos, bool& exitRequested);
+    void drawWingPanel(NURBSRenderer* renderer);
+
 private:
     GLFWwindow* window;
 };

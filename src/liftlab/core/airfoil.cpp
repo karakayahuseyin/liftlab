@@ -11,6 +11,11 @@ Airfoil::Airfoil(double M, double P, double T)
     x(NUM_POINTS), xu(NUM_POINTS), yu(NUM_POINTS), xl(NUM_POINTS), yl(NUM_POINTS) {
 }
 
+Airfoil::Airfoil(int airfoilNum)
+    : M(airfoilNum / 10000.0), P(((airfoilNum / 100) % 10) / 10), T((airfoilNum % 100) / 100),
+    x(NUM_POINTS), xu(NUM_POINTS), yu(NUM_POINTS), xl(NUM_POINTS), yl(NUM_POINTS) {
+}
+
 double Airfoil::camberLine(double x)
 {
     if (x <= P) {

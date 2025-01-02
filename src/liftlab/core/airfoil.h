@@ -9,8 +9,6 @@
 #include <vector>
 #include <cmath>
 
-#include "nurbs.h"
-
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -32,6 +30,7 @@ public:
     typedef struct s_point Point;
 
     Airfoil(double M, double P, double T);
+    Airfoil(int airfoilNum);
     ~Airfoil() = default;
 
     std::vector<Point> generate();

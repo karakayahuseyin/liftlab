@@ -1,13 +1,14 @@
-// Copyrigt (C) 2024 Hüseyin Karakaya
+// Copyrigt (C) 2025 Hüseyin Karakaya
 // This file is part of the liftlab project and is licensed under the MIT License.
 
-#include "window.h"
 #include <iostream>
+
+#include "liftlab/ui/window.h"
 
 Window* globalInstance = nullptr;
 
-Window::Window(NURBSRenderer* renderer)
-    : width(1200), height(800), title("NURBS Renderer"), renderer(renderer),
+Window::Window()
+    : width(1200), height(800), title("LiftLab"),
       cameraPos(0.0f, 0.0f, 5.0f), cameraFront(0.0f, 0.0f, -1.0f), cameraUp(0.0f, 1.0f, 0.0f),
       yaw(-90.0f), pitch(0.0f), zoom(45.0f), leftMousePressed(false), rightMousePressed(false),
       lastX(width / 2.0), lastY(height / 2.0), cameraSpeed(0.01f) 
@@ -15,6 +16,14 @@ Window::Window(NURBSRenderer* renderer)
     cameraRight = glm::normalize(glm::cross(cameraFront, cameraUp));
     globalInstance = this;
     gui = nullptr;
+    renderer = nullptr;
+}
+
+Window::~Window() 
+{
+    delete globalInstance;
+    delete gui;
+    delete renderer;
 }
 
 void Window::create() 
@@ -46,9 +55,11 @@ void Window::create()
     glEnable(GL_DEPTH_TEST);
 
     shaderProgram = compileShader();
-    renderer->initialize();
 
     gui = new Gui(window);
+    renderer = new NURBSRenderer();
+
+    renderer->initialize();
 }
 
 void Window::render() 
@@ -60,7 +71,8 @@ void Window::render()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         gui->beginFrame(); // ImGui çerçevesi başlat
-        gui->drawPanel(zoom, cameraPos, exitRequested, renderer); // Kontrol paneli çiz
+        gui->drawInfoPanel(zoom, cameraPos, exitRequested); // Kontrol paneli çiz
+        gui->drawWingPanel(renderer); // Kanat panelini çiz
         gui->render(); // ImGui'yi OpenGL'e render et
 
         glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
@@ -72,7 +84,6 @@ void Window::render()
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
         renderer->render(view, projection);
-
         gui->endFrame();
 
         glfwSwapBuffers(window);
@@ -88,7 +99,7 @@ void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, 
 {
     if (key == GLFW_KEY_X && action == GLFW_PRESS) {
         std::cerr << "X key pressed. Closing window..." << std::endl;
-        glfwSetWindowShouldClose(window, true); // Trigger the render loop to exit
+        glfwSetWindowShouldClose(window, true);
     }
 }
 
