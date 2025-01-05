@@ -1,4 +1,4 @@
-// Copyrigt (C) 2025 Hüseyin Karakaya
+// Copyright (C) 2025 Hüseyin Karakaya
 // This file is part of the LiftLab project and is licensed under the MIT License.
 
 #ifndef NURBS_H
@@ -17,6 +17,7 @@ typedef struct s_curve {
     int numCtrlPoints;
     std::vector<Point3D> ctrlPoints;
     std::vector<double> knotVector;
+    std::vector<double> weights; // Added weights
 } Curve;
 
 typedef struct s_surface {
@@ -25,15 +26,18 @@ typedef struct s_surface {
     std::vector<Point3D> ctrlPoints; 
     std::vector<double> knotVectorU;
     std::vector<double> knotVectorV;
+    std::vector<double> weights; // Added weights
 } Surface;
 
-Curve* createCurve(int degree, int numCtrlPoints);
+// Curve functions
+Curve* createCurve(int degree, int numCtrlPoints, const std::vector<double>& weights);
 void freeCurve(Curve* curve);
 double basisFunction(int i, int degree, double u, const std::vector<double>& knotVector);
 Point3D evaluateCurve(const Curve& curve, double u);
 
-Surface* createSurface(int degreeU, int degreeV, std::vector<Point3D> ctrlPoints, 
-                       int numCtrlPointsU, int numCtrlPointsV);
+// Surface functions
+Surface* createSurface(int degreeU, int degreeV, const std::vector<Point3D>& ctrlPoints, 
+                       int numCtrlPointsU, int numCtrlPointsV, const std::vector<double>& weights);
 void freeSurface(Surface* surface);
 Point3D evaluateSurface(const Surface* surface, double u, double v);
 
