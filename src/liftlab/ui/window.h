@@ -47,7 +47,7 @@ private:
     float cameraSpeed;
 
     NURBSRenderer* renderer;
-    Gui* gui;
+    ImGuiDrawer* imguiDrawer;
 
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);

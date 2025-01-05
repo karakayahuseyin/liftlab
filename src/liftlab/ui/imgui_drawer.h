@@ -16,10 +16,10 @@
 #include "liftlab/core/wing.h"
 #include "liftlab/renderer/nurbs_renderer.h"
 
-class Gui {
+class ImGuiDrawer {
 public:
-    Gui(GLFWwindow* window);
-    ~Gui();
+    ImGuiDrawer(GLFWwindow* window);
+    ~ImGuiDrawer();
 
     void beginFrame();
     void render();

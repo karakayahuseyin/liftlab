@@ -21,12 +21,12 @@ public:
     void addSurface(const Nurbs::Surface* surface);
     void initialize();
     void render(glm::mat4 view, glm::mat4 projection);
-    void clear(); //
+    void clear();
     void exportSurfaces();
 
 private:
     void generateSurfaceMesh(const Nurbs::Surface* surface);
-    
+
     std::vector<const Nurbs::Surface*> surfaces;
     unsigned int VAO, VBO;
     std::vector<float> vertices;

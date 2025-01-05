@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cmath>
 
-#include "airfoil.h"
+#include "liftlab/core/airfoil.h"
 
 Airfoil::Airfoil(double M, double P, double T)
     : M(M / 100.0), P(P / 10.0), T(T / 100.0),

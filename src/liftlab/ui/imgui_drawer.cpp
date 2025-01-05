@@ -4,7 +4,7 @@
 #include <iostream>
 #include "liftlab/ui/imgui_drawer.h"
 
-Gui::Gui(GLFWwindow* window) : window(window) 
+ImGuiDrawer::ImGuiDrawer(GLFWwindow* window) : window(window) 
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -16,32 +16,32 @@ Gui::Gui(GLFWwindow* window) : window(window)
     ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-Gui::~Gui() 
+ImGuiDrawer::~ImGuiDrawer() 
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
 
-void Gui::beginFrame() 
+void ImGuiDrawer::beginFrame() 
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 }
 
-void Gui::render() 
+void ImGuiDrawer::render() 
 {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void Gui::endFrame() 
+void ImGuiDrawer::endFrame() 
 {
     glfwPollEvents();
 }
 
-void Gui::drawInfoPanel(float& zoom, glm::vec3& cameraPos, bool& exitRequested) 
+void ImGuiDrawer::drawInfoPanel(float& zoom, glm::vec3& cameraPos, bool& exitRequested) 
 {
     ImGui::SetNextWindowPos(ImVec2(15, 15));
     ImGui::SetNextWindowSize(ImVec2(250, 200));
@@ -61,7 +61,7 @@ void Gui::drawInfoPanel(float& zoom, glm::vec3& cameraPos, bool& exitRequested)
 double span, chord;
 int airfoilNum;
 
-void Gui::drawWingPanel(NURBSRenderer* renderer) 
+void ImGuiDrawer::drawWingPanel(NURBSRenderer* renderer) 
 {
     ImGui::SetNextWindowPos(ImVec2(15, 230));
     ImGui::SetNextWindowSize(ImVec2(250, 250));
