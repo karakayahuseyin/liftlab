@@ -19,12 +19,7 @@ Window::Window()
     renderer = nullptr;
 }
 
-Window::~Window() 
-{
-    delete globalInstance;
-    delete imguiDrawer;
-    delete renderer;
-}
+Window::~Window() {}
 
 void Window::create() 
 {
