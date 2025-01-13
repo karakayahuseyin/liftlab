@@ -1,10 +1,11 @@
 // Copyright (C) 2025 Hüseyin Karakaya
 // This file is part of the LiftLab project and is licensed under the MIT License.
 
-#include "liftlab/renderer/nurbs.h"
-#include <stdexcept>
+#include "geometry/NURBS.h"
 
-namespace Nurbs {
+#include <iostream>
+
+namespace NURBS {
 
 std::vector<double> createUniformKnotVector(int degree, int numCtrlPoints) 
 {
@@ -18,7 +19,7 @@ std::vector<double> createUniformKnotVector(int degree, int numCtrlPoints)
 Curve* createCurve(int degree, int numCtrlPoints, const std::vector<double>& weights) 
 {
     if (weights.size() != numCtrlPoints) {
-        throw std::runtime_error("Weights size must match the number of control points.");
+        std::cout << "Weights size must match the number of control points." << std::endl;
     }
 
     Curve* curve = new Curve;
@@ -26,7 +27,7 @@ Curve* createCurve(int degree, int numCtrlPoints, const std::vector<double>& wei
     curve->numCtrlPoints = numCtrlPoints;
     curve->ctrlPoints.resize(numCtrlPoints);
     curve->knotVector = createUniformKnotVector(degree, numCtrlPoints);
-    curve->weights = weights; // Set weights
+    curve->weights = weights;
     return curve;
 }
 
@@ -61,7 +62,7 @@ Point3D evaluateCurve(const Curve& curve, double u)
 
     for (int i = 0; i < curve.numCtrlPoints; ++i) {
         double Ni_u = basisFunction(i, curve.degree, u, curve.knotVector);
-        double weight = curve.weights[i]; // Use weight for each control point
+        double weight = curve.weights[i];
 
         point.x += weight * Ni_u * curve.ctrlPoints[i].x;
         point.y += weight * Ni_u * curve.ctrlPoints[i].y;
@@ -91,7 +92,7 @@ Surface* createSurface(int degreeU, int degreeV, const std::vector<Point3D>& ctr
     surface->ctrlPoints = ctrlPoints;
     surface->knotVectorU = createUniformKnotVector(degreeU, numCtrlPointsU);
     surface->knotVectorV = createUniformKnotVector(degreeV, numCtrlPointsV);
-    surface->weights = weights; // Set weights
+    surface->weights = weights;
     return surface;
 }
 
@@ -109,8 +110,8 @@ Point3D evaluateSurface(const Surface* surface, double u, double v)
         for (int j = 0; j < surface->numCtrlPointsV; ++j) {
             double Ni_u = basisFunction(i, surface->degreeU, u, surface->knotVectorU);
             double Nj_v = basisFunction(j, surface->degreeV, v, surface->knotVectorV);
-            int index = j * surface->numCtrlPointsU + i; // Index in 1D array
-            double weight = surface->weights[index]; // Use weight for this control point
+            int index = j * surface->numCtrlPointsU + i;
+            double weight = surface->weights[index];
 
             point.x += weight * Ni_u * Nj_v * surface->ctrlPoints[index].x;
             point.y += weight * Ni_u * Nj_v * surface->ctrlPoints[index].y;
@@ -126,4 +127,23 @@ Point3D evaluateSurface(const Surface* surface, double u, double v)
     return point;
 }
 
-}; // namespace Nurbs
+void generateMesh(const Surface* surface, std::vector<float>& vertices, const int resolutionU, const int resolutionV) 
+{
+    for (int i = 0; i <= resolutionU; ++i) {
+        double u = i / (double)resolutionU;
+        for (int j = 0; j <= resolutionV; ++j) {
+            double v = j / (double)resolutionV;
+            Point3D point = evaluateSurface(surface, u, v);
+            vertices.push_back(point.x);
+            vertices.push_back(point.y);
+            vertices.push_back(point.z);
+        }
+    }
+}
+
+void exportObj(const Surface* surface, const char* filename)
+{
+
+}
+
+} // namespace NURBS

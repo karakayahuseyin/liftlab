@@ -2,7 +2,7 @@
 # This file is part of the LiftLab project and is licensed under the MIT License.
 
 cmake_minimum_required(VERSION 3.10)
-project(liftlab LANGUAGES C CXX)
+project(LiftLab LANGUAGES C CXX)
 
 # C++17 standard requirement
 set(CMAKE_CXX_STANDARD 17)
@@ -15,18 +15,20 @@ set(INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 # Project source files
 set(SOURCES
     # Core functionality
-    "${SRC_DIR}/liftlab/main.cpp"
-    "${SRC_DIR}/liftlab/core/airfoil.cpp"
-    "${SRC_DIR}/liftlab/core/wing.cpp"
+    "${SRC_DIR}/LiftLab.cpp"
+    "${SRC_DIR}/core/Airfoil.cpp"
+    "${SRC_DIR}/core/Wing.cpp"
 
+    # Geometry components
+    "${SRC_DIR}/geometry/NURBS.cpp"
+    
     # Rendering components
-    "${SRC_DIR}/liftlab/renderer/shader.cpp"
-    "${SRC_DIR}/liftlab/renderer/nurbs.cpp"
-    "${SRC_DIR}/liftlab/renderer/nurbs_renderer.cpp"
+    "${SRC_DIR}/renderer/Shader.cpp"
+    "${SRC_DIR}/renderer/Renderer.cpp"
 
     # User interface components
-    "${SRC_DIR}/liftlab/ui/window.cpp"
-    "${SRC_DIR}/liftlab/ui/imgui_drawer.cpp"
+    "${SRC_DIR}/gui/Window.cpp"
+    "${SRC_DIR}/gui/ImGuiDrawer.cpp"
 
     # OpenGL initialization
     "${INCLUDE_DIR}/glad/glad.c"
@@ -61,6 +63,7 @@ target_include_directories(imgui_backend PUBLIC
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(glm REQUIRED)
+find_package(OpenCASCADE REQUIRED)
 
 # Handle OpenGL configuration for MinGW
 if(MINGW)
@@ -69,10 +72,10 @@ if(MINGW)
 endif()
 
 # Set include directories
-target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR} ${SRC_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR} ${SRC_DIR} ${OpenCASCADE_INCLUDE_DIR})
 
 # Link ImGui, GLFW, and OpenGL libraries
 target_link_libraries(imgui_backend imgui glfw OpenGL::GL)
-target_link_libraries(${PROJECT_NAME} imgui_backend imgui glfw OpenGL::GL m)
+target_link_libraries(${PROJECT_NAME} imgui_backend imgui glfw OpenGL::GL m ${OpenCASCADE_LIBRARIES})
 
 message(STATUS "LiftLab project configuration complete.")

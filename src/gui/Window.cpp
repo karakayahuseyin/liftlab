@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "liftlab/ui/window.h"
+#include "gui/Window.h"
 
 Window* globalInstance = nullptr;
 
@@ -65,10 +65,10 @@ void Window::render()
     while (!glfwWindowShouldClose(window) && !exitRequested) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        imguiDrawer->beginFrame(); // ImGui çerçevesi başlat
-        imguiDrawer->drawInfoPanel(zoom, cameraPos, exitRequested); // Kontrol paneli çiz
-        imguiDrawer->drawWingPanel(renderer); // Kanat panelini çiz
-        imguiDrawer->render(); // ImGui'yi OpenGL'e render et
+        imguiDrawer->beginFrame();
+        imguiDrawer->drawInfoPanel(zoom, cameraPos, exitRequested);
+        // imguiDrawer->drawWingPanel(renderer);
+        imguiDrawer->render();
 
         glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         glm::mat4 projection = glm::perspective(glm::radians(zoom), static_cast<float>(width) / height, 0.1f, 100.0f);

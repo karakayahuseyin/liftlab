@@ -13,8 +13,8 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
-#include "liftlab/core/wing.h"
-#include "liftlab/renderer/nurbs_renderer.h"
+#include "core/Wing.h"
+#include "renderer/Renderer.h"
 
 class ImGuiDrawer {
 public:

@@ -12,9 +12,9 @@
 
 #include <string>
 
-#include "liftlab/renderer/nurbs_renderer.h"
-#include "liftlab/renderer/shader.h"
-#include "liftlab/ui/imgui_drawer.h"
+#include "renderer/Renderer.h"
+#include "renderer/Shader.h"
+#include "gui/ImGuiDrawer.h"
 
 class Window {
 public:

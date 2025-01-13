@@ -1,7 +1,7 @@
 // Copyrigt (C) 2025 Hüseyin Karakaya
 // This file is part of the LiftLab project and is licensed under the MIT License.
 
-#include "liftlab/renderer/shader.h"
+#include "renderer/Shader.h"
 
 const char* vertexShaderSource = R"glsl(
 #version 330 core

@@ -15,37 +15,28 @@
 #define NUM_POINTS 100
 #define SPLINE_DEGREE 3
 
-class Airfoil // 4 digit
-{
-    
+class Airfoil {
 public:
-    struct s_point
+    typedef struct s_point
     {
         double X;
         double Xu;
         double Yu;
         double Xl;
         double Yl;
-    };
-    typedef struct s_point Point;
+    } Point;
 
     Airfoil(double M, double P, double T);
     Airfoil(int airfoilNum);
     ~Airfoil() = default;
 
-    std::vector<Point> generate();
+    void generate();
+    std::vector<Point> getAirfoilPoints() const { return airfoilPoints; }
 
 private:
-    const double a0 = 0.2969;
-    const double a1 = -0.126;
-    const double a2 = -0.3516;
-    const double a3 = 0.2843;
-    const double a4 = -0.1015;
-
     double M, P, T;
-    std::vector<Point> airfoilData;
-
     std::vector<double> x, xu, yu, xl, yl;
+    std::vector<Airfoil::Point> airfoilPoints;
 
     double camberLine(double x);
     double camberGradient(double x);

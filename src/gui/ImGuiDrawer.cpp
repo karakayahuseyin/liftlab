@@ -1,8 +1,9 @@
 // Copyrigt (C) 2025 Hüseyin Karakaya
 // This file is part of the LiftLab project and is licensed under the MIT License.
 
+#include "gui/ImGuiDrawer.h"
+
 #include <iostream>
-#include "liftlab/ui/imgui_drawer.h"
 
 ImGuiDrawer::ImGuiDrawer(GLFWwindow* window) : window(window) 
 {
@@ -58,46 +59,11 @@ void ImGuiDrawer::drawInfoPanel(float& zoom, glm::vec3& cameraPos, bool& exitReq
     ImGui::End();
 }
 
-double span, chord;
-int airfoilNum;
-
 void ImGuiDrawer::drawWingPanel(NURBSRenderer* renderer) 
 {
     ImGui::SetNextWindowPos(ImVec2(15, 230));
     ImGui::SetNextWindowSize(ImVec2(250, 250));
     ImGui::Begin("Wing", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
-    ImGui::Text("Wing Parameters:");
-    ImGui::InputInt("Airfoil", &airfoilNum);
-    ImGui::InputDouble("Span" , &span);
-    ImGui::InputDouble("Chord" , &chord);
-    if (ImGui::Button("Generate Wing")) {
-        double M = airfoilNum / 1000.0;
-        double P = (airfoilNum / 100) % 10;
-        double T = airfoilNum % 100;
-        Airfoil airfoil(M, P, T);
-        Wing newWing(airfoil, span, chord);
-        std::vector<Nurbs::Surface*> surfaces = newWing.generate();
-        if (surfaces.empty() || !surfaces[0]) {
-            throw std::runtime_error("Failed to generate surfaces");
-        }
-        renderer->clear();
-        for (Nurbs::Surface* surface : surfaces) {
-            renderer->addSurface(surface);
-            std::cout << "Surface added" << std::endl;
-        }
-        renderer->initialize();
-    }
-    if (ImGui::Button("Export Surfaces")) {
-        renderer->exportSurfaces();
-    }
-    ImGui::Text("Surface Parameters:");
-    // ImGui::SliderInt("U Resolution", &renderer->uResolution, 1, 100);
-    // ImGui::SliderInt("V Resolution", &renderer->vResolution, 1, 100);
-    ImGui::Separator();
-    ImGui::Text("Surface Display:");
-    // ImGui::Checkbox("Control Points", &renderer->showControlPoints);
-    // ImGui::Checkbox("Control Net", &renderer->showControlNet);
-    // ImGui::Checkbox("Surface", &renderer->showSurface);
     ImGui::End();
 }
 

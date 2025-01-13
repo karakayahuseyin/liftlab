@@ -4,7 +4,13 @@
 #include <iostream>
 #include <cmath>
 
-#include "liftlab/core/airfoil.h"
+#include "core/Airfoil.h"
+
+const double a0 = 0.2969;
+const double a1 = -0.126;
+const double a2 = -0.3516;
+const double a3 = 0.2843;
+const double a4 = -0.1015;
 
 Airfoil::Airfoil(double M, double P, double T)
     : M(M / 100.0), P(P / 10.0), T(T / 100.0),
@@ -28,7 +34,7 @@ double Airfoil::camberLine(double x)
 
 double Airfoil::camberGradient(double x)
 {
-    if (x <= P) {
+  	if (x <= P) {
         return (2 * M / (P * P)) * (P - x);
     }
     else {
@@ -40,9 +46,9 @@ double Airfoil::thicknessDistribution(double x) {
     return 5 * T * (a0 * std::sqrt(x) + a1 * x + a2 * x * x + a3 * x * x * x + a4 * x * x * x * x);
 }
 
-std::vector<Airfoil::Point> Airfoil::generate()
+void Airfoil::generate()
 {
-    std::vector<Point> airfoilPoints;
+    // Generate the airfoil points
     for (int i = 0; i < NUM_POINTS; ++i) {
         Point point;
 
@@ -60,17 +66,16 @@ std::vector<Airfoil::Point> Airfoil::generate()
         point.Yl = yc - yt * std::cos(theta);
 
         airfoilPoints.push_back(point);
-    }
+    } 
 
     if (airfoilPoints.size() < NUM_POINTS) {
         std::cerr << "Error: airfoilPoints vector must have at least" 
                         << NUM_POINTS << "elements!" << std::endl;
-        return {};
+        airfoilPoints.clear();
+        return;
     }
 
     // Set the leading edge and trailing edge points
-    airfoilPoints[0] = { 0.0, 0.0, 0.0, 0.0, 0.0 }; // leading edge
-    airfoilPoints[99] = { 1.0, 1.0, 0.0, 1.0, 0.0 }; // trailing edge
-
-    return airfoilPoints;
+    this->airfoilPoints[0] = { 0.0, 0.0, 0.0, 0.0, 0.0 };
+    this->airfoilPoints[99] = { 1.0, 1.0, 0.0, 1.0, 0.0 };
 }

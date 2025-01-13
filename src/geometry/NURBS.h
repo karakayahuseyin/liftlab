@@ -6,7 +6,7 @@
 
 #include <vector>
 
-namespace Nurbs {
+namespace NURBS {
 
 typedef struct s_point3d { 
     double x, y, z; 
@@ -29,18 +29,17 @@ typedef struct s_surface {
     std::vector<double> weights; // Added weights
 } Surface;
 
-// Curve functions
 Curve* createCurve(int degree, int numCtrlPoints, const std::vector<double>& weights);
 void freeCurve(Curve* curve);
 double basisFunction(int i, int degree, double u, const std::vector<double>& knotVector);
 Point3D evaluateCurve(const Curve& curve, double u);
 
-// Surface functions
 Surface* createSurface(int degreeU, int degreeV, const std::vector<Point3D>& ctrlPoints, 
                        int numCtrlPointsU, int numCtrlPointsV, const std::vector<double>& weights);
 void freeSurface(Surface* surface);
 Point3D evaluateSurface(const Surface* surface, double u, double v);
 
-} // namespace Nurbs
+void exportSurface_STEP(const Surface* surface, const char* filename);
+} // namespace NURBS
 
 #endif // NURBS_H

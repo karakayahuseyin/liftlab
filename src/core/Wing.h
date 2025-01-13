@@ -6,20 +6,28 @@
 #ifndef WING_H
 #define WING_H
 
+#include "core/Airfoil.h"
+#include "geometry/NURBS.h"
+
 #include <vector>
-#include "liftlab/core/airfoil.h"
-#include "liftlab/renderer/nurbs.h"
 
 class Wing {
 public:
 	Wing(Airfoil airfoil, double span, double chord);
 	~Wing() = default;
+
+	Airfoil airfoil() const { return m_airfoil; }
+	double span() const { return m_span; }
+	double chord() const { return m_chord; }
+	void generate();
 	
-	std::vector<Nurbs::Surface*> generate();
 private:
 	Airfoil m_airfoil;
 	double m_span;
 	double m_chord;
+
+	NURBS::Surface* upperSurface;
+	NURBS::Surface* lowerSurface;
 };
 
-#endif
+#endif // WING_H
