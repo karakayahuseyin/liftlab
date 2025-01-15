@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "liftlab/ui/window.h"
+#include "gui/Window.h"
 
 Window* globalInstance = nullptr;
 
@@ -15,16 +15,11 @@ Window::Window()
 {
     cameraRight = glm::normalize(glm::cross(cameraFront, cameraUp));
     globalInstance = this;
-    gui = nullptr;
+    drawer = nullptr;
     renderer = nullptr;
 }
 
-Window::~Window() 
-{
-    delete globalInstance;
-    delete gui;
-    delete renderer;
-}
+Window::~Window() {}
 
 void Window::create() 
 {
@@ -56,8 +51,8 @@ void Window::create()
 
     shaderProgram = compileShader();
 
-    gui = new Gui(window);
-    renderer = new NURBSRenderer();
+    drawer = new Drawer(window);
+    renderer = new Renderer();
 
     renderer->initialize();
 }
@@ -70,10 +65,10 @@ void Window::render()
     while (!glfwWindowShouldClose(window) && !exitRequested) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        gui->beginFrame(); // ImGui çerçevesi başlat
-        gui->drawInfoPanel(zoom, cameraPos, exitRequested); // Kontrol paneli çiz
-        gui->drawWingPanel(renderer); // Kanat panelini çiz
-        gui->render(); // ImGui'yi OpenGL'e render et
+        drawer->beginFrame();
+        drawer->drawInfoPanel(zoom, cameraPos, exitRequested);
+        // drawer->drawWingPanel(renderer);
+        drawer->render();
 
         glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         glm::mat4 projection = glm::perspective(glm::radians(zoom), static_cast<float>(width) / height, 0.1f, 100.0f);
@@ -84,13 +79,13 @@ void Window::render()
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
         renderer->render(view, projection);
-        gui->endFrame();
+        drawer->endFrame();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    delete gui;
+    delete drawer;
     delete renderer;
     glfwTerminate();
 }

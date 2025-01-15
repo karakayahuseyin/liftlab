@@ -12,9 +12,12 @@
 
 #include <string>
 
-#include "liftlab/renderer/nurbs_renderer.h"
-#include "liftlab/renderer/shader.h"
-#include "liftlab/ui/imgui_drawer.h"
+#include "renderer/Renderer.h"
+#include "renderer/Shader.h"
+#include "gui/Drawer.h"
+
+
+// TODO: New camera and controls classes must be implemented. And this class must be refactored.
 
 class Window {
 public:
@@ -46,8 +49,8 @@ private:
     double lastY;
     float cameraSpeed;
 
-    NURBSRenderer* renderer;
-    Gui* gui;
+    Renderer* renderer;
+    Drawer* drawer;
 
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);

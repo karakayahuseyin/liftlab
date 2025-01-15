@@ -1,9 +1,14 @@
-// Copyrigt (C) 2025 Hüseyin Karakaya
-// This file is part of the Liftab project and is licensed under the MIT License.
+// Copyright (C) 2025 Hüseyin Karakaya
+// This file is part of the LiftLab project and is licensed under the MIT License.
 
-#include "liftlab/renderer/nurbs.h"
+#include "geometry/Geometry.h"
+#include "geometry/NURBS.h"
 
-namespace Nurbs {
+
+#include <iostream>
+
+namespace Geom {
+namespace NURBS {
 
 std::vector<double> createUniformKnotVector(int degree, int numCtrlPoints) 
 {
@@ -14,13 +19,18 @@ std::vector<double> createUniformKnotVector(int degree, int numCtrlPoints)
     return knotVector;
 }
 
-Curve* createCurve(int degree, int numCtrlPoints) 
+Curve* createCurve(int degree, int numCtrlPoints, const std::vector<double>& weights) 
 {
+    if (weights.size() != numCtrlPoints) {
+        std::cout << "Weights size must match the number of control points." << std::endl;
+    }
+
     Curve* curve = new Curve;
     curve->degree = degree;
     curve->numCtrlPoints = numCtrlPoints;
     curve->ctrlPoints.resize(numCtrlPoints);
     curve->knotVector = createUniformKnotVector(degree, numCtrlPoints);
+    curve->weights = weights;
     return curve;
 }
 
@@ -55,7 +65,7 @@ Point3D evaluateCurve(const Curve& curve, double u)
 
     for (int i = 0; i < curve.numCtrlPoints; ++i) {
         double Ni_u = basisFunction(i, curve.degree, u, curve.knotVector);
-        double weight = 1.0; // Assuming weights are all 1.0 for simplicity
+        double weight = curve.weights[i];
 
         point.x += weight * Ni_u * curve.ctrlPoints[i].x;
         point.y += weight * Ni_u * curve.ctrlPoints[i].y;
@@ -70,8 +80,13 @@ Point3D evaluateCurve(const Curve& curve, double u)
     return point;
 }
 
-Surface* createSurface(int degreeU, int degreeV, std::vector<Point3D> ctrlPoints, int numCtrlPointsU, int numCtrlPointsV) 
+Surface* createSurface(int degreeU, int degreeV, const std::vector<Point3D>& ctrlPoints, 
+                       int numCtrlPointsU, int numCtrlPointsV, const std::vector<double>& weights) 
 {
+    if (weights.size() != ctrlPoints.size()) {
+        throw std::runtime_error("Weights size must match the number of control points.");
+    }
+
     Surface* surface = new Surface;
     surface->degreeU = degreeU;
     surface->degreeV = degreeV;
@@ -79,11 +94,15 @@ Surface* createSurface(int degreeU, int degreeV, std::vector<Point3D> ctrlPoints
     surface->numCtrlPointsV = numCtrlPointsV;
     surface->ctrlPoints = ctrlPoints;
     surface->knotVectorU = createUniformKnotVector(degreeU, numCtrlPointsU);
-    surface->knotVectorV = createUniformKnotVector(degreeV, numCtrlPointsV); 
+    surface->knotVectorV = createUniformKnotVector(degreeV, numCtrlPointsV);
+    surface->weights = weights;
     return surface;
 }
 
-void freeSurface(Surface* surface) { delete surface; }
+void freeSurface(Surface* surface) 
+{
+    delete surface;
+}
 
 Point3D evaluateSurface(const Surface* surface, double u, double v) 
 {
@@ -94,9 +113,9 @@ Point3D evaluateSurface(const Surface* surface, double u, double v)
         for (int j = 0; j < surface->numCtrlPointsV; ++j) {
             double Ni_u = basisFunction(i, surface->degreeU, u, surface->knotVectorU);
             double Nj_v = basisFunction(j, surface->degreeV, v, surface->knotVectorV);
-            double weight = 1.0; // Assuming weights are all 1.0 for simplicity
+            int index = j * surface->numCtrlPointsU + i;
+            double weight = surface->weights[index];
 
-            int index = j * surface->numCtrlPointsU + i; // Calculate index in 1D array
             point.x += weight * Ni_u * Nj_v * surface->ctrlPoints[index].x;
             point.y += weight * Ni_u * Nj_v * surface->ctrlPoints[index].y;
             point.z += weight * Ni_u * Nj_v * surface->ctrlPoints[index].z;
@@ -110,4 +129,25 @@ Point3D evaluateSurface(const Surface* surface, double u, double v)
 
     return point;
 }
-}; // namespace Nurbs
+
+void generateMesh(const Surface* surface, std::vector<float>& vertices, const int resolutionU, const int resolutionV) 
+{
+    for (int i = 0; i <= resolutionU; ++i) {
+        double u = i / (double)resolutionU;
+        for (int j = 0; j <= resolutionV; ++j) {
+            double v = j / (double)resolutionV;
+            Point3D point = evaluateSurface(surface, u, v);
+            vertices.push_back(point.x);
+            vertices.push_back(point.y);
+            vertices.push_back(point.z);
+        }
+    }
+}
+
+void exportObj(const Surface* surface, const char* filename)
+{
+
+}
+
+} // namespace NURBS
+} // namespace Geom

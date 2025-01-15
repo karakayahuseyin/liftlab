@@ -1,3 +1,9 @@
-[submodule "include/imgui"]
-	path = include/imgui
+[submodule "external/glad"]
+	path = external/glad
+	url = https://github.com/karakayahuseyin/glad.git
+[submodule "external/imgui"]
+	path = external/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "external/doctest"]
+	path = external/doctest
+	url = https://github.com/doctest/doctest.git
