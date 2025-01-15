@@ -1,11 +1,11 @@
 // Copyrigt (C) 2025 Hüseyin Karakaya
 // This file is part of the LiftLab project and is licensed under the MIT License.
 
-#include "gui/ImGuiDrawer.h"
+#include "gui/Drawer.h"
 
 #include <iostream>
 
-ImGuiDrawer::ImGuiDrawer(GLFWwindow* window) : window(window) 
+Drawer::Drawer(GLFWwindow* window) : window(window) 
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -17,32 +17,32 @@ ImGuiDrawer::ImGuiDrawer(GLFWwindow* window) : window(window)
     ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-ImGuiDrawer::~ImGuiDrawer() 
+Drawer::~Drawer() 
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
 
-void ImGuiDrawer::beginFrame() 
+void Drawer::beginFrame() 
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 }
 
-void ImGuiDrawer::render() 
+void Drawer::render() 
 {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void ImGuiDrawer::endFrame() 
+void Drawer::endFrame() 
 {
     glfwPollEvents();
 }
 
-void ImGuiDrawer::drawInfoPanel(float& zoom, glm::vec3& cameraPos, bool& exitRequested) 
+void Drawer::drawInfoPanel(float& zoom, glm::vec3& cameraPos, bool& exitRequested) 
 {
     ImGui::SetNextWindowPos(ImVec2(15, 15));
     ImGui::SetNextWindowSize(ImVec2(250, 200));
@@ -59,11 +59,10 @@ void ImGuiDrawer::drawInfoPanel(float& zoom, glm::vec3& cameraPos, bool& exitReq
     ImGui::End();
 }
 
-void ImGuiDrawer::drawWingPanel(NURBSRenderer* renderer) 
+void Drawer::drawWingPanel(Renderer* renderer) 
 {
     ImGui::SetNextWindowPos(ImVec2(15, 230));
     ImGui::SetNextWindowSize(ImVec2(250, 250));
     ImGui::Begin("Wing", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
     ImGui::End();
 }
-

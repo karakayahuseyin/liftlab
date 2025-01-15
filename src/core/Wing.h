@@ -11,23 +11,33 @@
 
 #include <vector>
 
+typedef struct s_sect
+{
+	double span;
+	double rootChord;
+	double tipChord;
+	double sweep;
+	double dihedral;
+} WingSect;
+
 class Wing {
 public:
-	Wing(Airfoil airfoil, double span, double chord);
+	Wing(Airfoil airfoil, const std::vector<WingSect>& sections);
 	~Wing() = default;
 
 	Airfoil airfoil() const { return m_airfoil; }
 	double span() const { return m_span; }
-	double chord() const { return m_chord; }
-	void generate();
-	
+	double rootChord() const { return m_rootChord; }
+	double tipChord() const { return m_tipChord; }
+	double area() const { return m_area; }
+
 private:
 	Airfoil m_airfoil;
+	std::vector<WingSect> m_sections;
 	double m_span;
-	double m_chord;
-
-	NURBS::Surface* upperSurface;
-	NURBS::Surface* lowerSurface;
+	double m_rootChord;
+	double m_tipChord;
+	double m_area;
 };
 
 #endif // WING_H

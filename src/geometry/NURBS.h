@@ -4,13 +4,11 @@
 #ifndef NURBS_H
 #define NURBS_H
 
+#include "Geometry.h"
 #include <vector>
 
+namespace Geom {
 namespace NURBS {
-
-typedef struct s_point3d { 
-    double x, y, z; 
-} Point3D;
 
 typedef struct s_curve {
     int degree;
@@ -40,6 +38,8 @@ void freeSurface(Surface* surface);
 Point3D evaluateSurface(const Surface* surface, double u, double v);
 
 void exportSurface_STEP(const Surface* surface, const char* filename);
+
 } // namespace NURBS
+} // namespace Geom
 
 #endif // NURBS_H

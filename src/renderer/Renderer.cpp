@@ -5,9 +5,15 @@
 
 #include <glm/gtc/type_ptr.hpp>
    
-NURBSRenderer::NURBSRenderer() {}
+Renderer::Renderer() {}
 
-void NURBSRenderer::initialize()
+Renderer::~Renderer()
+{
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+}
+
+void Renderer::initialize()
 {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -20,21 +26,20 @@ void NURBSRenderer::initialize()
     glEnableVertexAttribArray(0);
 }
 
-void NURBSRenderer::render(glm::mat4 view, glm::mat4 projection)
+void Renderer::render(glm::mat4 view, glm::mat4 projection)
 {
     glBindVertexArray(VAO);
     glDrawArrays(GL_POINTS, 0, vertices.size() / 3);
 }
 
-void NURBSRenderer::clear()
+void Renderer::clear()
 {
-    vertices.clear();
+    // vertices.clear();
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 }
 
-NURBSRenderer::~NURBSRenderer()
+void Renderer::loadVertices(const std::vector<float>& vertices)
 {
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+    this->vertices = vertices;
 }

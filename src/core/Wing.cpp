@@ -7,11 +7,17 @@
 #include <vector>
 #include <iostream>
 
-#define SLICE 10
+Wing::Wing(Airfoil airfoil, const std::vector<WingSect>& sections)
+    : m_airfoil(airfoil), m_sections(sections)
+{
+    m_rootChord = m_sections[0].rootChord;
+    m_tipChord = m_sections[m_sections.size() - 1].tipChord;
 
-Wing::Wing(Airfoil airfoil, double span, double chord)
-    : m_airfoil(airfoil), m_span(span), m_chord(chord)
-{}
+    for (int i = 0; i < m_sections.size(); ++i) {
+        m_span += m_sections[i].span;
+        m_area += (m_sections[i].rootChord + m_sections[i].tipChord) * m_sections[i].span / 2;
+    }
+}
 
 // std::vector<NURBS::Surface*> Wing::generate() 
 // {

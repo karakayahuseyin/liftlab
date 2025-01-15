@@ -1,10 +1,13 @@
 // Copyright (C) 2025 Hüseyin Karakaya
 // This file is part of the LiftLab project and is licensed under the MIT License.
 
+#include "geometry/Geometry.h"
 #include "geometry/NURBS.h"
+
 
 #include <iostream>
 
+namespace Geom {
 namespace NURBS {
 
 std::vector<double> createUniformKnotVector(int degree, int numCtrlPoints) 
@@ -147,3 +150,4 @@ void exportObj(const Surface* surface, const char* filename)
 }
 
 } // namespace NURBS
+} // namespace Geom

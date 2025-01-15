@@ -15,7 +15,7 @@ Window::Window()
 {
     cameraRight = glm::normalize(glm::cross(cameraFront, cameraUp));
     globalInstance = this;
-    imguiDrawer = nullptr;
+    drawer = nullptr;
     renderer = nullptr;
 }
 
@@ -51,8 +51,8 @@ void Window::create()
 
     shaderProgram = compileShader();
 
-    imguiDrawer = new ImGuiDrawer(window);
-    renderer = new NURBSRenderer();
+    drawer = new Drawer(window);
+    renderer = new Renderer();
 
     renderer->initialize();
 }
@@ -65,10 +65,10 @@ void Window::render()
     while (!glfwWindowShouldClose(window) && !exitRequested) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        imguiDrawer->beginFrame();
-        imguiDrawer->drawInfoPanel(zoom, cameraPos, exitRequested);
-        // imguiDrawer->drawWingPanel(renderer);
-        imguiDrawer->render();
+        drawer->beginFrame();
+        drawer->drawInfoPanel(zoom, cameraPos, exitRequested);
+        // drawer->drawWingPanel(renderer);
+        drawer->render();
 
         glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         glm::mat4 projection = glm::perspective(glm::radians(zoom), static_cast<float>(width) / height, 0.1f, 100.0f);
@@ -79,13 +79,13 @@ void Window::render()
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
         renderer->render(view, projection);
-        imguiDrawer->endFrame();
+        drawer->endFrame();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    delete imguiDrawer;
+    delete drawer;
     delete renderer;
     glfwTerminate();
 }

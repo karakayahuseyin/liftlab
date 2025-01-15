@@ -13,12 +13,13 @@
 
 #include "geometry/NURBS.h"
 
-class NURBSRenderer {
+class Renderer {
 public:
-    NURBSRenderer();
-    ~NURBSRenderer();
+    Renderer();
+    ~Renderer();
 
     void initialize();
+    void loadVertices(const std::vector<float>& vertices);
     void render(glm::mat4 view, glm::mat4 projection);
     void clear();
 
