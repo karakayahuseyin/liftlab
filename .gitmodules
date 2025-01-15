@@ -1,6 +1,6 @@
-[submodule "include/imgui"]
-	path = include/imgui
+[submodule "external/imgui"]
+	path = external/imgui
 	url = https://github.com/ocornut/imgui.git
-[submodule "include/glad"]
-	path = include/glad
+[submodule "external/glad"]
+	path = external/glad
 	url = https://github.com/karakayahuseyin/glad.git
