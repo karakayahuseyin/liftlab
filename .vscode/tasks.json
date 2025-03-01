@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "checkBuildType",
+      "type": "shell",
+      "command": "if grep -q \"CMAKE_BUILD_TYPE:STRING=Debug\" build/CMakeCache.txt; then echo \"Build type is Debug.\"; else echo \"Build type is not Debug. Building in Debug mode...\"; make clean && make debug; fi",
+      "problemMatcher": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "make build",
+      "problemMatcher": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "label": "checkBuildBeforeDebug",
+      "dependsOn": ["checkBuildType", "build"],
+      "dependsOrder": "sequence"
+    },
+    {
+      "label": "checkAndBuildNormal",
+      "type": "shell",
+      "command": "if grep -q \"CMAKE_BUILD_TYPE:STRING=Debug\" build/CMakeCache.txt; then echo \"Switching to normal build...\"; make clean && make build; else echo \"Build type is not Debug.\"; fi",
+      "problemMatcher": [],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug (gdb)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/LiftLab",
+            "args": [],
+            "cwd": "${workspaceFolder}/build",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "miDebuggerPath": "/usr/bin/gdb",
+            "preLaunchTask": "checkBuildBeforeDebug"
+        },
+        {
+            "name": "Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/LiftLab",
+            "args": [],
+            "cwd": "${workspaceFolder}/build",
+            "externalConsole": false,
+            "preLaunchTask": "checkAndBuildNormal"
+        },
+        {
+            "name" : "Test",
+            "type" : "cppdbg",
+            "request" : "launch",
+            "program" : "${workspaceFolder}/build/LiftLab_tests",
+            "args": [],
+            "cwd" : "${workspaceFolder}/build",
+            "externalConsole" : false,
+            "preLaunchTask": "checkAndBuildNormal"
+        }
+    ]
+}
